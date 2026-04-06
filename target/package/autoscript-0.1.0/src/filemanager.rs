@@ -9,10 +9,9 @@ let mut selected_option=String::new();
 stdin()
  .read_line(&mut selected_option)
   .expect("wrong number");
-let num: usize = selected_option
+selected_option
 .trim()
-.parse().expect("It should be a number");
-num
+.parse().expect("It should be a number")
 
 }
 
@@ -80,6 +79,21 @@ v.extend(self.get_files_paths(
 
 }
 v
+/*let v: Vec<_> = fs::read_dir(path)?.map(|i|{
+if let Ok(j)= i{
+
+format!("{} is_dir={}",String::from(
+j.path()
+.to_str()
+.expect("no str")),j.path().is_dir())
+}else{
+panic!("hlo");
+}
+}).collect();
+Ok(v)
+//Ok(vec!["hlo".to_string()])
+
+*/
 }
 
 
@@ -92,7 +106,7 @@ path.file_name().unwrap().to_str().unwrap());
 
 
  }
-println!("Press {} or greater to exit" , files_list.len());
+println!("Press {} to exit" , files_list.len());
 }
 
 pub fn mainloop(&self,text:&str,path:&String){
@@ -100,17 +114,27 @@ let paths: Vec<_> =self.get_files_paths(&mut self
 .get_dir_items(path));
 self.files_show(&paths);
 let mut num : usize= inputnum!(text);
-while num<=paths.len(){
+
  if num<paths.len(){
 
 process::Command::new("nano")
-.arg(&paths[num][..]).status()
+.arg(&paths[num][..]).spawn()
 .expect("Command not working");
-self.files_show(&paths);
-num = inputnum!(text);
-}else {
-break;
+//self.files_show(&paths);
+//println!("{}",&paths[num][..]);
+self.mainloop(text,path);
+}else if num==paths.len(){
+
+}else{
+
+println!("Please enter the number from the given list ");
+self.mainloop(text,path);
+//self.files_show(&paths);
 }
- }
+
+ 
+//num=inputnum!(text);
+
+
 }
 }

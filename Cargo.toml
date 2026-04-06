@@ -1,6 +1,15 @@
 [package]
-name = "autoscript"
-version = "0.1.0"
+[package]
+name = "autoscript" # Ensure this matches your project name
+version = "0.1.1"   # You MUST increment this from 0.1.0
+authors = [Harman Singh all.dart603@passinbox.com]
 edition = "2024"
-
+description = "A CLI tool to quickly select and edit files using numbers."
+repository = "https://codeberg.org/comdotharman/Autoscript2"
+license = "MIT OR Apache-2.0"
+keywords = ["cli", "file-manager", "automation"]
+categories = ["command-line-utilities"]
+[[bin]]
+name = "autoscript"
+path = "src/main.rs"
 [dependencies]
