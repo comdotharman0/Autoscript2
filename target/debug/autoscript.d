@@ -1,1 +1,0 @@
-/data/data/com.termux/files/home/Autoscript2/target/debug/autoscript: /data/data/com.termux/files/home/Autoscript2/target/package/autoscript-0.1.0/src/filemanager.rs /data/data/com.termux/files/home/Autoscript2/target/package/autoscript-0.1.0/src/main.rs

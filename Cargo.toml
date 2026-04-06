@@ -1,8 +1,7 @@
 [package]
-[package]
 name = "autoscript" # Ensure this matches your project name
 version = "0.1.1"   # You MUST increment this from 0.1.0
-authors = [Harman Singh all.dart603@passinbox.com]
+authors = ["Harman Singh all.dart603@passinbox.com"]
 edition = "2024"
 description = "A CLI tool to quickly select and edit files using numbers."
 repository = "https://codeberg.org/comdotharman/Autoscript2"
