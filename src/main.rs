@@ -4,7 +4,7 @@ use filemanager::FileManager;
 
 fn main() {
 	
-let fm:FileManager = FileManager.new();
+let fm:FileManager = FileManager::new();
 fm.mainloop("Enter your number : ",&fm.get_cwd());
 println!("{:#?}",fm);
 }
