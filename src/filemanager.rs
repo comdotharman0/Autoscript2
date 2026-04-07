@@ -11,7 +11,7 @@ path::Path};
 /// then "0" is selected by default
 
 macro_rules! inputnum{
-($text:expr)=>{
+($text:expr,$default:expr)=>{
 {
 println!("{}",$text);
 //std::io::stdout().flush().expect("Stdout not flushe>
@@ -20,13 +20,14 @@ stdin()
  .read_line(&mut selected_option)
    .map_err(|e| e).unwrap_or_else(|_|{
 println!("Some error occurred please restart");
-0
+$default
 });
 let num : usize= selected_option
 .trim()
 .parse().unwrap_or_else(|_|{
-println!("you chose invalid value so by default 0 is selected");
-0
+println!(
+"you chose invalid value so program exits now. Please restart and use correct value");
+$default
 });
 num
 
@@ -163,13 +164,13 @@ Result<(),Error>{
 let paths: Vec<_> =self.get_files_paths(&mut self
 .get_dir_items(path)?,ignore_list_file_path)?;
 self.files_show(&paths)?;
-let mut num = inputnum!(text);
+let mut num = inputnum!(text,paths.len());
 while num<=paths.len(){
  if num<paths.len(){
  Command::new("nano")
 .arg(&paths[num][..]).status()?;
 self.files_show(&paths)?;
- num = inputnum!(text);
+ num = inputnum!(text,paths.len());
 }else {
 break;
 }

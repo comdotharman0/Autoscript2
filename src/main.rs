@@ -14,6 +14,5 @@ let ignore_list = if args.len() > 1 {
 println!(" the cwd is {:#?}",&fm.get_cwd()?);
 fm.mainloop("Enter your number : ",&fm.get_cwd()?,
 &ignore_list)?;
-println!("{:#?}",fm);
 Ok(())
 }
