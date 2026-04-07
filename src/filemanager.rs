@@ -1,14 +1,30 @@
+//! # Autoscript File Manager
+//! 
+//! `Autoscript` provides a robust, recursive file management system designed to 
+//! handle file discovery and batch editing with safety and configurability.
+//! 
+//! This module contains the [`FileManager`] struct which handles directory traversal,
+//! path filtering via ignore lists, and a terminal-based interface for file manipulation.
+
+
 use std::{io::{stdin, Error},
 process::Command,
 env::current_dir,
 fs::{read_dir,read_to_string},
 path::Path};
 
-/// The macro `inputnum` enables the program
-/// to take the user input as a number and return a 
-/// "usize" type. 
-/// if a user types invalid number 
-/// then "0" is selected by default
+
+/// Prompts the user for numeric input via standard input.
+/// 
+/// # Arguments
+/// * `$text` - The string slice message to display to the user.
+/// * `$default` - The fallback `usize` value if the input is invalid or an error occurs.
+/// 
+/// # Returns
+/// Returns a `usize`. If the user provides a non-numeric string or an I/O error occurs,
+/// it prints an error message and returns the `$default` value.
+///macro_rules! inputnum { ... }
+
 
 macro_rules! inputnum{
 ($text:expr,$default:expr)=>{
@@ -38,6 +54,8 @@ num
 }
 
 
+/// A stateless manager for handling recursive file operations and directory traversal.
+
 #[derive(Debug)]
 pub struct FileManager;
 
@@ -50,7 +68,12 @@ pub fn new()->Self{
 FileManager
 }
 
-
+/// Returns the current working directory as a String.
+    /// 
+    /// # Errors
+    /// Returns an [`std::io::Error`] if the current directory does not exist 
+    /// or if the process lacks permissions to access it.
+ 
 
 pub fn get_cwd(&self)->Result<String,Error>{
 let path=current_dir()?;
@@ -58,6 +81,14 @@ Ok(path.to_string_lossy().into_owned())
 
 }
 
+/// Retrieves a list of all items (files and folders) within a specified directory.
+    /// 
+    /// # Arguments
+    /// * `path` - A reference to a String representing the directory to scan.
+    /// 
+    /// # Errors
+    /// Returns `InvalidData` if a filename contains invalid Unicode, or a standard 
+    /// I/O error if the path is not a directory.
 
 pub fn get_dir_items(&self, path:&String)->
 Result<Vec<String>,Error>{
@@ -81,6 +112,14 @@ std::io::ErrorKind::InvalidData,
 
 }
 
+/// Loads a list of patterns to ignore from a plain text file.
+    /// 
+    /// Each line in the file is treated as a separate ignore pattern. Whitespace 
+    /// is trimmed, and empty lines are discarded.
+    /// 
+    /// # Errors
+    /// Returns an error if the file cannot be read or found.
+
 
 pub fn load_ignore_list(&self, file_path: &str) ->
  Result<Vec<String>, Error> {
@@ -94,6 +133,17 @@ pub fn load_ignore_list(&self, file_path: &str) ->
         .collect();
     Ok(list)
 }
+
+/// Recursively finds all file paths within a list of directories, respecting 
+    /// an optional ignore list.
+    /// 
+    /// # Arguments
+    /// * `path` - A mutable vector of starting directory/file paths.
+    /// * `paths_to_ignore` - An optional vector of strings. If a path contains 
+    /// any of these strings, it will be skipped.
+    /// 
+    /// # Errors
+    /// Returns an error if the traversal encounters a directory it cannot read.
 
 
 pub fn get_files_paths(&self,
@@ -136,6 +186,12 @@ Ok(v)
 }
 
 
+/// Displays a numbered list of files to the standard output.
+    /// 
+    /// # Arguments
+    /// * `files_list` - A reference to a vector of file paths to display.
+
+
 pub fn files_show(&self,files_list:&Vec<String>)->
 Result<(),Error>{
 for (i, file_path) in files_list.iter().enumerate() {
@@ -155,7 +211,15 @@ std::io::ErrorKind::InvalidData,
 Ok(())
 }
 
-
+/// The primary execution loop for the file manager.
+    /// 
+    /// This function scans the directory, presents the files to the user, and 
+    /// opens the selected file in the `nano` editor. It repeats until the 
+    /// user chooses to exit.
+    /// 
+    /// # Errors
+    /// Returns an error if the external editor (`nano`) fails to start or if 
+    /// I/O operations fail.
 
 
 pub fn mainloop(&self,text:&str,path:&String,
