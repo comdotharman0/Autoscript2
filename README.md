@@ -1,5 +1,8 @@
 # Autoscript2
 
+
+[![DOI](https://img.shields.io/badge/DOI-10.6084/m9.figshare.32172564-blue.svg)](https://doi.org/10.6084/m9.figshare.32172564)
+
 **Autoscript2** is a robust, recursive file manager developed in Rust. It is designed to be "crash-proof" through deep recursive search and robust error handling.
 
 ---
